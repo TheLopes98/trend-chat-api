@@ -1,5 +1,6 @@
 import tweepy
 from pytrends.request import TrendReq
+import os
 
 def get_google_trends():
     try:
@@ -18,17 +19,19 @@ def get_google_trends():
         return []
 
 def get_twitter_trends():
-    BEARER_TOKEN = AAAAAAAAAAAAAAAAAAAAAEbu0wEAAAAANa4eejGmm2qqNOBrhlkTNkKC5NU%3DEv9ryvLu62Qh1NROvVuY0CVJvH7MnQVyrIaRsVxgF3EUquPwPo'
+    BEARER_TOKEN = os.getenv("TWITTER_BEARER_TOKEN")
 
     try:
         client = tweepy.Client(bearer_token=BEARER_TOKEN)
         query = '#BBB OR #Funk OR #TBT OR #Brasil -is:retweet lang:pt'
         tweets = client.search_recent_tweets(query=query, max_results=10)
-        if not tweets.data:
+
+        if tweets.data is None:
             return []
+
         hashtags = []
         for tweet in tweets.data:
-            hashtags.extend([word for word in tweet.text.split() if word.startswith('#')])
+            hashtags.extend([word.lower() for word in tweet.text.split() if word.startswith('#')])
         return list(set(hashtags))[:5]
     except Exception as e:
         print("Erro ao buscar trends do Twitter:", e)
