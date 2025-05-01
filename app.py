@@ -8,7 +8,11 @@ def trends():
     google = get_google_trends()
     twitter = get_twitter_trends()
     mensagens = gerar_mensagens(google, twitter)
-    return jsonify({"google": google, "twitter": twitter, "mensagens": mensagens})
+    return jsonify({
+        "google": google,
+        "twitter": twitter,
+        "mensagens": mensagens
+    })
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=10000)
