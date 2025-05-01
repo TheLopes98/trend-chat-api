@@ -1,0 +1,5 @@
+Flask
+tweepy
+pytrends
+pandas
+gunicorn
